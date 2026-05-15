@@ -5,7 +5,7 @@ from time import time
 
 # Calculate dates based on today's date
 
-_cache = {"data": None, "timestamp": 0}
+_cache = {}
 CACHE_TTL = 60
 
 def get_price_data(ticker = '^IXIC', daysbf = 59):
@@ -30,7 +30,7 @@ def get_price_data(ticker = '^IXIC', daysbf = 59):
         data.columns = data.columns.get_level_values(0)
     return data
 
-def get_cached_data():
+def get_cached_data(ticker):
     '''
     Caching data is important in this context because fetching historical price data from an external source 
     like Yahoo Finance is time-consuming and involves rate limits in calling. 
@@ -40,7 +40,6 @@ def get_cached_data():
     without overwhelming the data source with requests.
     '''
    
-    if _cache["data"] is None or time() - _cache["timestamp"] > CACHE_TTL:
-        _cache["data"] = get_price_data()
-        _cache["timestamp"] = time()
-    return _cache["data"]
+    if ticker not in _cache or time() - _cache[ticker]["timestamp"] > CACHE_TTL:
+        _cache[ticker] = {"data": get_price_data(ticker), "timestamp": time()}
+    return _cache[ticker]["data"]

@@ -25,14 +25,15 @@ def root():
     }
 
 @app.get("/index", response_model=IndexResponse)
-def index():
+def index(ticker: str = "^IXIC"):
+    data = get_cached_data(ticker)
     try:
         data = get_cached_data()
         return {
             "ticker": '^IXIC',
-            "latest_price": float(data["Close"].iloc[-1]),
-            "volatility_30d": annual_volatility(data),
-            "max_drawdown_pct": maxdrawdown(data) * 100,
+            "latest_price": round(float(data["Close"].iloc[-1]), 2),
+            "volatility_30d": round(annual_volatility(data), 2),
+            "max_drawdown_pct": round(maxdrawdown(data) * 100, 2),
             "as_of": data.index[-1].strftime('%Y-%m-%d')
         }
     except Exception as e:
