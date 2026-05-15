@@ -1,9 +1,7 @@
 import yfinance as yf
 import pandas as pd
-import numpy as np
 from datetime import datetime, timedelta
 from time import time
-from fastapi import FastAPI, HTTPException
 
 # Calculate dates based on today's date
 
@@ -46,44 +44,3 @@ def get_cached_data():
         _cache["data"] = get_price_data()
         _cache["timestamp"] = time()
     return _cache["data"]
-
-def annual_volatility(data):
-    
-    '''
-    Calculate the annualized volatility of a stock based on its historical price data.
-    Basically a measure of how much the stock price fluctuates over a year using the 
-    standard deviation of daily returns.
-    '''
-    
-    returns = np.log(data["Close"]).diff().dropna()
-    volatility = returns.std() * np.sqrt(252)
-    return float(volatility)
-
-app = FastAPI()
-
-def maxdrawdown(data):
-   
-   #Calculate the maximum drawdown of a stock based on its historical price data.
-    
-    cumulative_returns = (1 + data["Close"].pct_change()).cumprod()
-    rolling_max = cumulative_returns.cummax()
-    drawdown = (cumulative_returns - rolling_max) / rolling_max
-    max_drawdown = drawdown.min()
-    return float(max_drawdown)
-
-# Define the API endpoint to fetch the latest price, volatility, and max drawdown
-
-@app.get("/index")
-def index():
-    try:
-        data = get_cached_data()
-        return {
-            "ticker": '^IXIC',
-            "latest_price": float(data["Close"].iloc[-1]),
-            "30d_volatility": annual_volatility(data),
-            "max_drawdown_pct": maxdrawdown(data) * 100,
-            "as_of": data.index[-1].strftime('%Y-%m-%d')
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Data fetch failed: {str(e)}")
-
