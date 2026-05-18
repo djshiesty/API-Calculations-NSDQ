@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NDXLive</title>
+    <link rel="stylesheet" href="/static/styles.css?v=2">
+</head>
+<body>
+
+    <header>
+        <h1>NDXLive</h1>
+        <p class="subtitle">Real-time market analytics</p>
+        <select id="ticker">
+            <option value="^IXIC">Nasdaq Composite</option>
+            <option value="^NDX">Nasdaq-100</option>
+            <option value="^GSPC">S&amp;P 500</option>
+            <option value="^DJI">Dow Jones</option>
+        </select>
+    </header>
+
+    <main>
+        <p class="as-of" id="as-of">Loading...</p>
+
+        <div class="grid">
+            <div class="card">
+                <div class="label">Latest Price</div>
+                <div class="value" id="price">—</div>
+            </div>
+
+            <div class="card">
+                <div class="label">Annualized Volatility</div>
+                <div class="value" id="vol">—</div>
+            </div>
+
+            <div class="card">
+                <div class="label">Maximum Drawdown</div>
+                <div class="value negative" id="dd">—</div>
+            </div>
+
+            <div class="card wide">
+                <div class="label">Implied vs Realized Volatility</div>
+                <div class="value" id="spread">—</div>
+                <div class="interpretation" id="interpretation">—</div>
+                <div class="substats">
+                    <div>Implied: <span id="implied">—</span></div>
+                    <div>Realized: <span id="realized">—</span></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Data: Yahoo Finance · Backend: FastAPI</p>
+    </footer>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

@@ -22,14 +22,22 @@ def maxdrawdown(data):
     return float(max_drawdown)
 
 def implied_vs_realized(realized_vol):
-    vxn = yf.dounload('VXN', period = '5d', auto_adjust = True)
+    vxn = yf.download('^VXN', period = '5d', auto_adjust = True)
     if isinstance(vxn.columns, pd.MultiIndex):
         vxn.columns = vxn.columns.get_level_values(0)
     implied_vol = float(vxn["Close"].iloc[-1]/100)
     spread = implied_vol - realized_vol
+
+    if spread > 0.02:
+        interpretation = "Feared options pricing"
+    elif spread < -0.02:
+        interpretation = "Complacent options pricing"
+    else:
+        interpretation = "Aligned options pricing"
+        
     return {
-        "Implied volilitity:": implied_vol,
-        "Realized volitility:": realized_vol,
-        "Spread of Values:": spread,
-        "Interpretation": "Options pricing fear" if spread > 0.02 else "Options pricing complacency" if spread < -0.02 else "Aligned"
+        "implied_vol": round(implied_vol, 4),
+        "realized_vol": round(realized_vol, 4),
+        "spread": round(spread, 4),
+        "interpretation": interpretation
     }

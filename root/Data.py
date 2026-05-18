@@ -30,7 +30,7 @@ def get_price_data(ticker = '^IXIC', daysbf = 59):
         data.columns = data.columns.get_level_values(0)
     return data
 
-def get_cached_data(ticker):
+def get_cached_data(ticker='^IXIC'):
     '''
     Caching data is important in this context because fetching historical price data from an external source 
     like Yahoo Finance is time-consuming and involves rate limits in calling. 
