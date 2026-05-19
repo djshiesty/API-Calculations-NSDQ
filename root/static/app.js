@@ -2,7 +2,7 @@ async function loadData() {
     const ticker = document.getElementById("ticker").value;
     const res = await fetch("/index?ticker=" + encodeURIComponent(ticker));
     const data = await res.json();
-
+    
     document.getElementById("as-of").textContent = "As of " + data.As_of;
     document.getElementById("price").textContent = "$" + data.Latest_price.toLocaleString();
     document.getElementById("vol").textContent = (data.Volatility_30_days * 100).toFixed(2) + "%";
