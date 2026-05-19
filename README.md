@@ -1,6 +1,4 @@
-# API-Calculations-NSDQ
-
-# NDXLive — Real-Time Market Analytics API
+# API-Calculations-NSDQ — Real-Time Market Analytics API
 
 ## Abstract
 
